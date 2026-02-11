@@ -1,0 +1,71 @@
+<!doctype html><html lang=zh><head><meta charset=UTF-8><meta name=viewport content="width=device-width,initial-scale=1"><title>技术分享：前端特效实现 | 我的博客</title><meta name=description content><meta name=keywords content="[]"><link rel=stylesheet href=https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css><link rel=stylesheet href=/css/custom.css><link rel=stylesheet href=/css/custom-additions.css></head><body><div class=hero-section><div class=hero-content><h1 class=hero-typewriter data-text=欢迎来到我的博客></h1><p class=hero-subtitle>分享技术、记录生活</p><a href=#main-content class=enter-btn>进入博客 <i class="fa-solid fa-arrow-down"></i></a></div></div><header id=top-nav><a href=/ class=logo><i class="fa-solid fa-feather"></i> 我的博客</a><nav><ul><li><a href=/><i class="fa-solid fa-house"></i> 首页</a></li><li><a href=/posts/><i class="fa-solid fa-book"></i> 文章</a></li><li><a href=/categories/><i class="fa-solid fa-layer-group"></i> 分类</a></li><li><a href=/tags/><i class="fa-solid fa-tags"></i> 标签</a></li><li><a href=/about/><i class="fa-solid fa-user"></i> 关于</a></li></ul></nav><button class=theme-toggle id=theme-toggle>
+<i class="fa-solid fa-moon"></i> 暗色</button></header><div id=container><aside class=left-sidebar><div class=profile-card><img src=/img/avatar.svg alt=Avatar class=avatar><h2 class=author-name>作者</h2><p class=author-bio>记录学习与生活</p><div class=social-links><a href=https://github.com title=GitHub target=_blank><i class="fa-brands fa-github"></i>
+</a><a href=mailto:example@email.com title=Email target=_blank><i class="fa-solid fa-envelope"></i></a></div></div><div class=stats><div class=stat-item><span class=stat-label><i class="fa-solid fa-file-lines"></i> 文章数</span>
+<span class=stat-value>4</span></div><div class=stat-item><span class=stat-label><i class="fa-solid fa-folder"></i> 分类数</span>
+<span class=stat-value>2</span></div><div class=stat-item><span class=stat-label><i class="fa-solid fa-tags"></i> 标签数</span>
+<span class=stat-value>8</span></div></div><div class=quick-links><h3><i class="fa-solid fa-link"></i> 快捷链接</h3><ul><li><a href=/><i class="fa-solid fa-house"></i> 首页</a></li><li><a href=/posts/><i class="fa-solid fa-book"></i> 文章</a></li><li><a href=/categories/><i class="fa-solid fa-layer-group"></i> 分类</a></li><li><a href=/tags/><i class="fa-solid fa-tags"></i> 标签</a></li><li><a href=/about/><i class="fa-solid fa-user"></i> 关于</a></li></ul></div></aside><main id=main-content><article class=article-full><header class=article-header><h1 class=article-title>技术分享：前端特效实现</h1><div class=article-meta><span><i class="fa-solid fa-calendar"></i> 2025-02-09</span>
+<span><i class="fa-solid fa-clock"></i> 1 分钟阅读</span>
+<span><i class="fa-solid fa-user"></i> 作者</span>
+<span><i class="fa-solid fa-folder"></i> 技术</span></div></header><div class=article-content><h1 id=前端特效实现>前端特效实现</h1><p>在现代Web开发中，精美的特效可以大大提升用户体验。下面分享几种常用的前端特效。</p><h2 id=烟花波纹效果>烟花波纹效果</h2><p>使用Canvas实现烟花波纹效果：</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-javascript data-lang=javascript><span style=display:flex><span><span style=color:#66d9ef>class</span> <span style=color:#a6e22e>RippleEffect</span> {
+</span></span><span style=display:flex><span>  <span style=color:#a6e22e>constructor</span>() {
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>this</span>.<span style=color:#a6e22e>ripples</span> <span style=color:#f92672>=</span> [];
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>this</span>.<span style=color:#a6e22e>colors</span> <span style=color:#f92672>=</span> [<span style=color:#e6db74>&#39;#e8c4a0&#39;</span>, <span style=color:#e6db74>&#39;#d4a574&#39;</span>, <span style=color:#e6db74>&#39;#c9b896&#39;</span>];
+</span></span><span style=display:flex><span>    document.<span style=color:#a6e22e>addEventListener</span>(<span style=color:#e6db74>&#39;click&#39;</span>, (<span style=color:#a6e22e>e</span>) =&gt; <span style=color:#66d9ef>this</span>.<span style=color:#a6e22e>createRipple</span>(<span style=color:#a6e22e>e</span>));
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>this</span>.<span style=color:#a6e22e>animate</span>();
+</span></span><span style=display:flex><span>  }
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>  <span style=color:#a6e22e>createRipple</span>(<span style=color:#a6e22e>e</span>) {
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>const</span> <span style=color:#a6e22e>x</span> <span style=color:#f92672>=</span> <span style=color:#a6e22e>e</span>.<span style=color:#a6e22e>clientX</span>;
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>const</span> <span style=color:#a6e22e>y</span> <span style=color:#f92672>=</span> <span style=color:#a6e22e>e</span>.<span style=color:#a6e22e>clientY</span>;
+</span></span><span style=display:flex><span>    <span style=color:#75715e>// 创建波纹效果
+</span></span></span><span style=display:flex><span>  }
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>  <span style=color:#a6e22e>animate</span>() {
+</span></span><span style=display:flex><span>    <span style=color:#75715e>// 动画循环
+</span></span></span><span style=display:flex><span>  }
+</span></span><span style=display:flex><span>}
+</span></span></code></pre></div><h2 id=星星拖尾>星星拖尾</h2><p>实现鼠标移动时的星星拖尾效果：</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-javascript data-lang=javascript><span style=display:flex><span><span style=color:#66d9ef>class</span> <span style=color:#a6e22e>StarTrail</span> {
+</span></span><span style=display:flex><span>  <span style=color:#a6e22e>constructor</span>() {
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>this</span>.<span style=color:#a6e22e>stars</span> <span style=color:#f92672>=</span> [];
+</span></span><span style=display:flex><span>    document.<span style=color:#a6e22e>addEventListener</span>(<span style=color:#e6db74>&#39;mousemove&#39;</span>, (<span style=color:#a6e22e>e</span>) =&gt; <span style=color:#66d9ef>this</span>.<span style=color:#a6e22e>createStar</span>(<span style=color:#a6e22e>e</span>));
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>this</span>.<span style=color:#a6e22e>animate</span>();
+</span></span><span style=display:flex><span>  }
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>  <span style=color:#a6e22e>createStar</span>(<span style=color:#a6e22e>e</span>) {
+</span></span><span style=display:flex><span>    <span style=color:#75715e>// 创建星星粒子
+</span></span></span><span style=display:flex><span>  }
+</span></span><span style=display:flex><span>}
+</span></span></code></pre></div><h2 id=蜘蛛网效果>蜘蛛网效果</h2><p>使用粒子系统实现蜘蛛网效果：</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-javascript data-lang=javascript><span style=display:flex><span><span style=color:#66d9ef>class</span> <span style=color:#a6e22e>SpiderWeb</span> {
+</span></span><span style=display:flex><span>  <span style=color:#a6e22e>constructor</span>() {
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>this</span>.<span style=color:#a6e22e>particles</span> <span style=color:#f92672>=</span> [];
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>this</span>.<span style=color:#a6e22e>connectionDistance</span> <span style=color:#f92672>=</span> <span style=color:#ae81ff>150</span>;
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>this</span>.<span style=color:#a6e22e>initParticles</span>();
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>this</span>.<span style=color:#a6e22e>animate</span>();
+</span></span><span style=display:flex><span>  }
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>  <span style=color:#a6e22e>drawConnections</span>() {
+</span></span><span style=display:flex><span>    <span style=color:#75715e>// 绘制粒子间的连线
+</span></span></span><span style=display:flex><span>  }
+</span></span><span style=display:flex><span>}
+</span></span></code></pre></div><h2 id=性能优化>性能优化</h2><p>实现特效时要注意性能优化：</p><ol><li>使用requestAnimationFrame</li><li>限制粒子数量</li><li>使用离屏Canvas</li><li>添加节流和防抖</li></ol><h2 id=总结>总结</h2><p>前端特效可以增强用户体验，但要适度使用，避免影响页面性能。</p></div><footer class=article-footer><div class=article-tags><span><i class="fa-solid fa-tags"></i> 标签:</span>
+<a href=/tags/%E5%89%8D%E7%AB%AF class=tag>前端</a>
+<a href=/tags/%E7%89%B9%E6%95%88 class=tag>特效</a>
+<a href=/tags/javascript class=tag>JavaScript</a></div><div class=article-share><span><i class="fa-solid fa-share-nodes"></i> 分享:</span>
+<a href=# onclick=shareToTwitter() title=Twitter><i class="fa-brands fa-twitter"></i></a>
+<a href=# onclick=shareToFacebook() title=Facebook><i class="fa-brands fa-facebook"></i></a>
+<a href=# onclick=shareToWeibo() title=微博><i class="fa-brands fa-weibo"></i></a></div><div class=article-nav><a href=/posts/first-post/ class="nav-btn nav-next"><i class="fa-solid fa-arrow-right"></i>
+<span>下一篇</span>
+<span class=nav-title>Hugo博客搭建指南</span></a></div></footer></article></main><aside class=right-sidebar><h3><i class="fa-solid fa-shuffle"></i> 随机文章</h3><div class=random-post><h4><a href=/posts/tech-sharing/>技术分享：前端特效实现</a></h4><div class=meta><i class="fa-solid fa-calendar"></i> 2025-02-09
+<span class=divider>|</span>
+<i class="fa-solid fa-clock"></i> 1 分钟</div></div><div class=random-post><h4><a href=/posts/first-post/>Hugo博客搭建指南</a></h4><div class=meta><i class="fa-solid fa-calendar"></i> 2025-02-10
+<span class=divider>|</span>
+<i class="fa-solid fa-clock"></i> 1 分钟</div></div><div class=random-post><h4><a href=/posts/welcome/>欢迎来到我的博客</a></h4><div class=meta><i class="fa-solid fa-calendar"></i> 2025-02-11
+<span class=divider>|</span>
+<i class="fa-solid fa-clock"></i> 1 分钟</div></div><h3><i class="fa-solid fa-fire"></i> 热门标签</h3><div class=tags-cloud><a href=/tags/hugo/ class=tag>Hugo</a>
+<a href=/tags/javascript/ class=tag>JavaScript</a>
+<a href=/tags/%E5%89%8D%E7%AB%AF/ class=tag>前端</a>
+<a href=/tags/%E5%8D%9A%E5%AE%A2/ class=tag>博客</a>
+<a href=/tags/%E5%BC%80%E5%A7%8B/ class=tag>开始</a>
+<a href=/tags/%E6%95%99%E7%A8%8B/ class=tag>教程</a>
+<a href=/tags/%E6%AC%A2%E8%BF%8E/ class=tag>欢迎</a>
+<a href=/tags/%E7%89%B9%E6%95%88/ class=tag>特效</a></div></aside></div><script src=/js/effects.js></script><script src=/js/spider.js></script><script>function shareToTwitter(){const e=encodeURIComponent(window.location.href),t=encodeURIComponent(document.title);window.open(`https://twitter.com/intent/tweet?text=${t}&url=${e}`,"_blank")}function shareToFacebook(){const e=encodeURIComponent(window.location.href);window.open(`https://www.facebook.com/sharer/sharer.php?u=${e}`,"_blank")}function shareToWeibo(){const e=encodeURIComponent(window.location.href),t=encodeURIComponent(document.title);window.open(`https://service.weibo.com/share/share.php?title=${t}&url=${e}`,"_blank")}</script></body></html>
