@@ -43,7 +43,7 @@
             </ul>
         </nav>
         <button class="theme-toggle" id="theme-toggle">
-            <i class="fa-solid fa-moon"></i> 暗色
+            <i class="fa-solid fa-moon"></i>
         </button>
     </header>
 
@@ -56,19 +56,23 @@
                 <h2 class="author-name">{{ .Site.Params.author | default "作者" }}</h2>
                 <p class="author-bio">{{ "记录学习与生活" }}</p>
                 <div class="social-links">
-                    <a href="https://github.com" title="GitHub" target="_blank">
+                    {{ with .Site.Params.social.github }}
+                    <a href="{{ . }}" title="GitHub" target="_blank">
                         <i class="fa-brands fa-github"></i>
                     </a>
-                    <a href="mailto:example@email.com" title="Email" target="_blank">
+                    {{ end }}
+                    {{ with .Site.Params.social.email }}
+                    <a href="{{ . }}" title="Email" target="_blank">
                         <i class="fa-solid fa-envelope"></i>
                     </a>
+                    {{ end }}
                 </div>
             </div>
 
             <div class="stats">
                 <div class="stat-item">
                     <span class="stat-label"><i class="fa-solid fa-file-lines"></i> 文章数</span>
-                    <span class="stat-value">{{ len .Site.RegularPages }}</span>
+                    <span class="stat-value">{{ len (where .Site.RegularPages "Type" "posts") }}</span>
                 </div>
                 <div class="stat-item">
                     <span class="stat-label"><i class="fa-solid fa-folder"></i> 分类数</span>

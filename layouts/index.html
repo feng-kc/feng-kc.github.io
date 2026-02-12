@@ -3,12 +3,12 @@
 <div id="main-content">
     <!-- 欢迎卡片 - 只在首页显示 -->
     <div class="welcome-card fade-in-section">
-        <h3><i class="fa-solid fa-heart"></i> 欢迎来到我的博客</h3>
+        <h3><i class="fa-solid fa-heart"></i> 欢迎来到FengKCの Blog</h3>
         <p>这里是一个温馨的个人空间，记录着我的学习心得、技术分享和生活点滴。希望你能在这里找到感兴趣的内容，也欢迎多多交流！</p>
         <div class="welcome-stats">
             <div class="welcome-stat">
                 <i class="fa-solid fa-file-lines"></i>
-                <span>{{ len .Site.RegularPages }} 篇文章</span>
+                <span>{{ len (where .Site.RegularPages "Type" "posts") }} 篇文章</span>
             </div>
             <div class="welcome-stat">
                 <i class="fa-solid fa-layer-group"></i>
@@ -23,7 +23,8 @@
 
     <h2 class="section-title fade-in-section delay-1"><i class="fa-solid fa-clock"></i> 最新文章</h2>
     <div class="posts-list">
-        {{ range first 5 .Site.RegularPages }}
+        {{ $posts := where .Site.RegularPages "Type" "posts" }}
+        {{ range first 5 $posts }}
         <article class="article-card fade-in-section">
             <h2><a href="{{ .RelPermalink }}">{{ .Title }}</a></h2>
             <div class="summary">{{ .Summary }}</div>
@@ -39,7 +40,8 @@
         {{ end }}
     </div>
 
-    {{ if gt (len .Site.RegularPages) 5 }}
+    {{ $posts := where .Site.RegularPages "Type" "posts" }}
+    {{ if gt (len $posts) 5 }}
     <div class="view-more fade-in-section">
         <a href="/posts/" class="btn">继续查看更多文章 <i class="fa-solid fa-arrow-right"></i></a>
     </div>

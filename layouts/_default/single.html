@@ -12,6 +12,23 @@
         </div>
     </header>
 
+    <!-- 标题管理器 -->
+    <div class="toc-float">
+        <div class="toc-toggle" id="toc-toggle">
+            <i class="fa-solid fa-list"></i>
+            <span>目录</span>
+        </div>
+        <div class="toc-content" id="toc-content">
+            <div class="toc-header">
+                <span><i class="fa-solid fa-book"></i> 文章目录</span>
+                <i class="fa-solid fa-times toc-close" id="toc-close"></i>
+            </div>
+            <div class="toc-list" id="toc-list">
+                <!-- 目录内容由JavaScript生成 -->
+            </div>
+        </div>
+    </div>
+
     <div class="article-content">
         {{ .Content }}
     </div>
@@ -88,5 +105,261 @@ function shareToWeibo() {
     const text = encodeURIComponent(document.title);
     window.open(`https://service.weibo.com/share/share.php?title=${text}&url=${url}`, '_blank');
 }
+
+// ==================== 目录功能 ====================
+function initTOC() {
+    const articleContent = document.querySelector('.article-content');
+    if (!articleContent) return;
+
+    const tocList = document.getElementById('toc-list');
+    const tocToggle = document.getElementById('toc-toggle');
+    const tocContent = document.getElementById('toc-content');
+    const tocClose = document.getElementById('toc-close');
+
+    if (!tocList || !tocToggle || !tocContent || !tocClose) return;
+
+    // 提取所有标题
+    const headings = articleContent.querySelectorAll('h1, h2, h3, h4, h5, h6');
+
+    if (headings.length === 0) {
+        tocToggle.style.display = 'none';
+        return;
+    }
+
+    // 构建目录结构
+    const tocData = [];
+    const stack = [{ level: 0, children: tocData }];
+
+    headings.forEach((heading) => {
+        const level = parseInt(heading.tagName.charAt(1));
+        const text = heading.textContent.trim();
+        const anchorDiv = heading.querySelector('.anchor');
+        const anchorId = anchorDiv ? anchorDiv.id : '';
+
+        const item = {
+            level: level,
+            text: text,
+            anchor: anchorId,
+            children: []
+        };
+
+        // 根据层级调整父级
+        while (stack.length > 1 && stack[stack.length - 1].level >= level) {
+            stack.pop();
+        }
+
+        const parent = stack[stack.length - 1];
+        parent.children.push(item);
+        stack.push({ level: level, children: item.children });
+    });
+
+    // 渲染目录
+    function renderTOC(items, container, currentLevel) {
+        if (items.length === 0) return;
+
+        const ul = document.createElement('ul');
+        ul.className = 'toc-level-' + currentLevel;
+
+        items.forEach(item => {
+            const li = document.createElement('li');
+            li.className = 'toc-item toc-level-' + item.level;
+
+            const a = document.createElement('a');
+            a.href = '#' + item.anchor;
+            a.textContent = item.text;
+            a.className = 'toc-link';
+
+            if (item.anchor) {
+                a.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    e.stopPropagation(); // 防止触发其他点击事件
+                    const target = document.getElementById(item.anchor);
+                    if (target) {
+                        // 获取主内容区域的滚动容器
+                        const mainContent = document.getElementById('main-content');
+                        const offset = 100;
+                        
+                        // 计算目标元素相对于主内容区域的位置
+                        const targetRect = target.getBoundingClientRect();
+                        const mainRect = mainContent.getBoundingClientRect();
+                        const relativeTop = targetRect.top - mainRect.top + mainContent.scrollTop - offset;
+                        
+                        // 在主内容区域内滚动
+                        mainContent.scrollTo({
+                            top: Math.max(0, relativeTop),
+                            behavior: 'smooth'
+                        });
+                        
+                        // 关闭目录面板
+                        tocContent.classList.remove('active');
+                        const icon = tocToggle.querySelector('i');
+                        icon.className = 'fa-solid fa-list';
+                    }
+                });
+            }
+
+            li.appendChild(a);
+
+            if (item.children.length > 0) {
+                renderTOC(item.children, li, item.level + 1);
+            }
+
+            ul.appendChild(li);
+        });
+
+        container.appendChild(ul);
+    }
+
+    renderTOC(tocData, tocList, 1);
+
+    // 切换显示/隐藏
+    tocToggle.addEventListener('click', (e) => {
+        // 如果正在拖动，不触发点击
+        if (tocFloat && tocFloat.dataset.isDragging === 'true') {
+            return;
+        }
+        tocContent.classList.toggle('active');
+        const icon = tocToggle.querySelector('i');
+        icon.className = tocContent.classList.contains('active') ?
+            'fa-solid fa-times' : 'fa-solid fa-list';
+    });
+
+    tocClose.addEventListener('click', () => {
+        tocContent.classList.remove('active');
+        const icon = tocToggle.querySelector('i');
+        icon.className = 'fa-solid fa-list';
+    });
+
+    // 点击外部关闭
+    document.addEventListener('click', (e) => {
+        if (!tocContent.contains(e.target) && !tocToggle.contains(e.target)) {
+            tocContent.classList.remove('active');
+            const icon = tocToggle.querySelector('i');
+            icon.className = 'fa-solid fa-list';
+        }
+    });
+
+    // ==================== 目录拖动功能 ====================
+    const tocFloat = document.querySelector('.toc-float');
+    if (tocFloat) {
+        let isDragging = false;
+        let startX, startY, initialRight, initialTop;
+        let hasMoved = false;
+
+        // 从localStorage读取保存的位置
+        const savedPosition = localStorage.getItem('tocPosition');
+        if (savedPosition) {
+            const pos = JSON.parse(savedPosition);
+            tocFloat.style.right = 'auto';
+            tocFloat.style.left = pos.left + 'px';
+            tocFloat.style.top = pos.top + 'px';
+        }
+
+        tocToggle.addEventListener('mousedown', (e) => {
+            isDragging = true;
+            hasMoved = false;
+            tocFloat.dataset.isDragging = 'false';
+            startX = e.clientX;
+            startY = e.clientY;
+            
+            const rect = tocFloat.getBoundingClientRect();
+            initialRight = window.innerWidth - rect.right;
+            initialTop = rect.top;
+            
+            tocFloat.style.cursor = 'grabbing';
+            tocToggle.style.cursor = 'grabbing';
+            e.preventDefault();
+        });
+
+        document.addEventListener('mousemove', (e) => {
+            if (!isDragging) return;
+            
+            const deltaX = e.clientX - startX;
+            const deltaY = e.clientY - startY;
+            
+            // 如果移动距离超过5px，认为是拖动而非点击
+            if (Math.abs(deltaX) > 5 || Math.abs(deltaY) > 5) {
+                hasMoved = true;
+                tocFloat.dataset.isDragging = 'true';
+            }
+            
+            const newRight = initialRight - deltaX;
+            const newTop = initialTop + deltaY;
+            
+            // 限制在视口范围内
+            const maxRight = window.innerWidth - tocFloat.offsetWidth - 10;
+            const maxTop = window.innerHeight - tocFloat.offsetHeight - 10;
+            
+            const clampedRight = Math.max(10, Math.min(newRight, maxRight));
+            const clampedTop = Math.max(70, Math.min(newTop, maxTop));
+            
+            tocFloat.style.right = 'auto';
+            tocFloat.style.left = (window.innerWidth - tocFloat.offsetWidth - clampedRight) + 'px';
+            tocFloat.style.top = clampedTop + 'px';
+        });
+
+        document.addEventListener('mouseup', () => {
+            if (isDragging) {
+                isDragging = false;
+                tocFloat.style.cursor = 'grab';
+                tocToggle.style.cursor = 'grab';
+                
+                // 延迟重置isDragging标志，确保click事件能检测到这个状态
+                setTimeout(() => {
+                    tocFloat.dataset.isDragging = 'false';
+                }, 50);
+                
+                // 保存位置到localStorage
+                const rect = tocFloat.getBoundingClientRect();
+                localStorage.setItem('tocPosition', JSON.stringify({
+                    left: rect.left,
+                    top: rect.top
+                }));
+            }
+        });
+    }
+
+    // 标题级数指示器
+    const indicator = document.createElement('div');
+    indicator.className = 'heading-level-indicator';
+    document.body.appendChild(indicator);
+
+    // 为所有标题添加鼠标悬停事件
+    const allHeadings = articleContent.querySelectorAll('h1, h2, h3, h4, h5, h6');
+    allHeadings.forEach(heading => {
+        heading.addEventListener('mouseenter', () => {
+            const level = parseInt(heading.tagName.charAt(1));
+            indicator.textContent = 'H' + level;
+            indicator.setAttribute('data-level', level);
+
+            // 先显示以获取尺寸
+            indicator.style.visibility = 'hidden';
+            indicator.style.opacity = '1';
+            document.body.appendChild(indicator);
+
+            const headingRect = heading.getBoundingClientRect();
+            const indicatorRect = indicator.getBoundingClientRect();
+
+            // 计算指示器位置：在标题最后一个字的右边
+            const topPosition = headingRect.top + window.pageYOffset + (headingRect.height - indicatorRect.height) / 2;
+            const leftPosition = headingRect.right - 50;
+
+            indicator.style.visibility = 'visible';
+            indicator.style.top = topPosition + 'px';
+            indicator.style.left = leftPosition + 'px';
+
+            indicator.classList.add('visible');
+        });
+
+        heading.addEventListener('mouseleave', () => {
+            indicator.classList.remove('visible');
+        });
+    });
+}
+
+// 页面加载完成后初始化
+document.addEventListener('DOMContentLoaded', () => {
+    initTOC();
+});
 </script>
 {{ end }}

@@ -255,7 +255,7 @@ function initThemeToggle() {
   // 从localStorage读取主题状态
   let isDark = localStorage.getItem('theme') === 'dark';
   document.body.classList.toggle('dark', isDark);
-  toggleBtn.textContent = isDark ? '☀️ 亮色' : '🌙 暗色';
+  toggleBtn.innerHTML = isDark ? '<i class="fa-solid fa-sun"></i>' : '<i class="fa-solid fa-moon"></i>';
 
   // 创建全屏切换遮罩
   const themeOverlay = document.createElement('div');
@@ -274,7 +274,7 @@ function initThemeToggle() {
     setTimeout(() => {
       isDark = !isDark;
       document.body.classList.toggle('dark', isDark);
-      toggleBtn.textContent = isDark ? '☀️ 亮色' : '🌙 暗色';
+      toggleBtn.innerHTML = isDark ? '<i class="fa-solid fa-sun"></i>' : '<i class="fa-solid fa-moon"></i>';
       localStorage.setItem('theme', isDark ? 'dark' : 'light');
 
       // 更新遮罩图标
@@ -373,10 +373,28 @@ function initTypewriter() {
   setTimeout(type, 500);
 }
 
+// ==================== 标题点击锚点功能 ====================
+function initHeadingAnchors() {
+  const headings = document.querySelectorAll('.article-content h1, .article-content h2, .article-content h3, .article-content h4, .article-content h5, .article-content h6');
+
+  headings.forEach(heading => {
+    // 查找标题内的锚点div id
+    const anchorDiv = heading.querySelector('.anchor');
+    if (!anchorDiv || !anchorDiv.id) return;
+
+    // 为整个标题添加点击事件
+    heading.addEventListener('click', () => {
+      const hash = '#' + anchorDiv.id;
+      window.location.hash = hash;
+    });
+  });
+}
+
 // ==================== 初始化 ====================
 document.addEventListener('DOMContentLoaded', () => {
   new RippleEffect();
   new StarTrail();
   initThemeToggle();
   initPageAnimations();
+  initHeadingAnchors();
 });
