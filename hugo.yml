@@ -1,0 +1,136 @@
+baseURL: "https://feng-kc.github.io"
+languageCode: "zh-CN"
+title: "FengKC の Blog"                                                                                                                     "
+theme: "blowfish"
+defaultContentLanguage: "zh"
+
+enableInlineShortcodes: true
+enableEmoji: true
+enableRobotsTXT: true
+
+paginate: 10
+summaryLength: 30
+
+build:
+  writeStats: true
+
+[minify]
+  minifyOutput: true
+
+[outputs]
+  home = ["HTML", "RSS", "JSON"]
+  page = ["HTML"]
+  section = ["HTML", "RSS"]
+
+[sitemap]
+  changefreq = 'daily'
+  filename = 'sitemap.xml'
+  priority = 0.5
+
+[permalinks]
+  posts = '/:slug'
+
+[taxonomies]
+  tag = "tags"
+  category = "categories"
+  author = "authors"
+  series = "series"
+
+author:
+  name: "FengKC"
+  image: "/img/avatar.svg"
+  bio: "记录学习与生活"
+  links:
+    - name: "GitHub"
+      icon: "fa-brands fa-github"
+      url: "https://github.com"
+    - name: "Email"
+      icon: "fa-solid fa-envelope"
+      url: "mailto:example@email.com"
+
+menu:
+  main:
+    - name: "首页"
+      url: "/"
+      weight: 1
+      pre: '<i class="fa-solid fa-house"></i>'
+
+    - name: "文章"
+      url: "/posts/"
+      weight: 2
+      pre: '<i class="fa-solid fa-book"></i>'
+
+    - name: "分类"
+      url: "/categories/"
+      weight: 3
+      pre: '<i class="fa-solid fa-layer-group"></i>'
+
+    - name: "标签"
+      url: "/tags/"
+      weight: 4
+      pre: '<i class="fa-solid fa-tags"></i>'
+
+    - name: "关于"
+      url: "/about/"
+      weight: 5
+      pre: '<i class="fa-solid fa-user"></i>'
+
+params:
+  author: "FengKC"
+  description: "FengKC の Blog，分享技术、记录生活"
+
+  # 头像和社交信息
+  avatarURL: "/img/minecraft.avatar.png"
+  favicon: "favicon.ico"
+
+  # 首页布局
+  homeTitle: "欢迎来到FengKC の Blog"
+  homeSubtitle: "分享技术、记录生活。"
+
+  # 日期格式
+  dateFormat: "2006-01-02"
+
+  # 主题外观
+  appearance: "auto"
+  autoSwitchAppearance: true
+
+  # 文章配置
+  showReadingTime: true
+  showShareButtons: true
+  showPostNavLinks: true
+  showBreadCrumbs: true
+  showCodeCopyButtons: true
+  showWordCount: true
+
+  # 侧边栏配置
+  showTableOfContents: true
+  tocOpen: false
+
+  # 头部配置
+  fullWidthHeader: false
+  showScrollToTop: true
+
+  # 底部配置
+  showFooter: true
+  footerLogo: "/img/minecraft.avatar.png"
+  footerCopyright: "© 2026 FengKC's Blog"
+
+  # 自定义CSS和JS
+  customCSS: ["css/custom.css"]
+  customJS: ["js/effects.js", "js/spider.js"]
+
+  # 字体设置
+  mainSections: ["posts"]
+
+  fuseOpts:
+    isCaseSensitive: false
+    shouldSort: true
+    location: 0
+    distance: 1000
+    threshold: 0.4
+    minMatchCharLength: 0
+    keys:
+      - title
+      - permalink
+      - summary
+      - content

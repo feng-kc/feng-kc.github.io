@@ -1,0 +1,25 @@
+main:
+  - name: "首页"
+    url: "/"
+    weight: 1
+    pre: '<i class="fa-solid fa-house"></i>'
+
+  - name: "文章"
+    url: "/posts/"
+    weight: 2
+    pre: '<i class="fa-solid fa-book"></i>'
+
+  - name: "分类"
+    url: "/categories/"
+    weight: 3
+    pre: '<i class="fa-solid fa-layer-group"></i>'
+
+  - name: "标签"
+    url: "/tags/"
+    weight: 4
+    pre: '<i class="fa-solid fa-tags"></i>'
+
+  - name: "关于"
+    url: "/about/"
+    weight: 5
+    pre: '<i class="fa-solid fa-user"></i>'

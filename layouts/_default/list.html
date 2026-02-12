@@ -1,0 +1,81 @@
+{{ define "main" }}
+<!-- 首页显示欢迎卡片 -->
+{{ if .IsHome }}
+<!-- 欢迎卡片 -->
+<div class="welcome-card fade-in-section">
+    <h3><i class="fa-solid fa-heart"></i> 欢迎来到我的博客</h3>
+    <p>这里是一个温馨的个人空间，记录着我的学习心得、技术分享和生活点滴。希望你能在这里找到感兴趣的内容，也欢迎多多交流！</p>
+    <div class="welcome-stats">
+        <div class="welcome-stat">
+            <i class="fa-solid fa-file-lines"></i>
+            <span>{{ len .Site.RegularPages }} 篇文章</span>
+        </div>
+        <div class="welcome-stat">
+            <i class="fa-solid fa-layer-group"></i>
+            <span>{{ len .Site.Taxonomies.categories }} 个分类</span>
+        </div>
+        <div class="welcome-stat">
+            <i class="fa-solid fa-tags"></i>
+            <span>{{ len .Site.Taxonomies.tags }} 个标签</span>
+        </div>
+    </div>
+</div>
+
+<h2 class="section-title fade-in-section delay-1"><i class="fa-solid fa-clock"></i> 最新文章</h2>
+<div class="posts-list">
+    {{ range first 5 .Site.RegularPages }}
+    <article class="article-card fade-in-section">
+        <h2><a href="{{ .RelPermalink }}">{{ .Title }}</a></h2>
+        <div class="summary">{{ .Summary }}</div>
+        <div class="meta">
+            <span><i class="fa-solid fa-calendar"></i> {{ .Date.Format "2006-01-02" }}</span>
+            <span><i class="fa-solid fa-clock"></i> {{ .ReadingTime }} 分钟</span>
+            <span><i class="fa-solid fa-folder"></i> {{ range .Params.categories }}{{ . }}{{ end }}</span>
+        </div>
+    </article>
+    {{ end }}
+</div>
+
+{{ if gt (len .Site.RegularPages) 5 }}
+<div class="view-more fade-in-section">
+    <a href="/posts/" class="btn">继续查看更多文章 <i class="fa-solid fa-arrow-right"></i></a>
+</div>
+{{ end }}
+{{ else }}
+<!-- 非首页显示原有内容 -->
+<div class="page-header">
+    <h1 class="page-title">
+        {{ if eq .Kind "taxonomy" }}
+        <i class="fa-solid fa-tag"></i> {{ .Title }}
+        {{ else }}
+        <i class="fa-solid fa-book"></i> {{ .Title }}
+        {{ end }}
+    </h1>
+    {{ if .Content }}
+    <div class="page-description">{{ .Content }}</div>
+    {{ end }}
+</div>
+
+<div class="posts-list">
+    {{ range .Pages }}
+    <article class="article-card">
+        <h2><a href="{{ .RelPermalink }}">{{ .Title }}</a></h2>
+        <div class="summary">{{ .Summary }}</div>
+        <div class="read-more-btn">
+            <a href="{{ .RelPermalink }}" class="btn-small">查看更多 <i class="fa-solid fa-arrow-right"></i></a>
+        </div>
+        <div class="meta">
+            <span><i class="fa-solid fa-calendar"></i> {{ .Date.Format "2006-01-02" }}</span>
+            <span><i class="fa-solid fa-clock"></i> {{ .ReadingTime }} 分钟</span>
+            {{ with .Params.categories }}
+            <span><i class="fa-solid fa-folder"></i> {{ range . }}{{ . }} {{ end }}</span>
+            {{ end }}
+        </div>
+    </article>
+    {{ end }}
+</div>
+
+<!-- Pagination -->
+{{ partial "pagination.html" . }}
+{{ end }}
+{{ end }}

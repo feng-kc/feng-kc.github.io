@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="{{ .Site.Language.Lang }}">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ .Title }} | {{ .Site.Title }}</title>
+    <meta name="description" content="{{ .Description }}">
+    <meta name="keywords" content="{{ .Keywords }}">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="{{ "css/custom.css" | relURL }}">
+    <link rel="stylesheet" href="{{ "css/custom-additions.css" | relURL }}">
+    
+    {{ block "head" . }}{{ end }}
+</head>
+<body>
+    <!-- Hero Section -->
+    <div class="hero-section">
+        <div class="hero-content">
+            <h1 class="hero-typewriter" data-text="{{ .Site.Params.homeTitle | default "欢迎来到我的博客" }}"></h1>
+            <p class="hero-subtitle">{{ .Site.Params.homeSubtitle | default "分享技术、记录生活" }}</p>
+            <a href="#main-content" class="enter-btn">进入博客 <i class="fa-solid fa-arrow-down"></i></a>
+        </div>
+    </div>
+
+    <!-- Navigation -->
+    <header id="top-nav">
+        <a href="{{ "/" | relURL }}" class="logo">
+            <i class="fa-solid fa-feather"></i> {{ .Site.Title }}
+        </a>
+        <nav>
+            <ul>
+                {{ range .Site.Menus.main }}
+                <li>
+                    <a href="{{ .URL | relURL }}">
+                        {{ if .Pre }}{{ .Pre | safeHTML }}{{ end }} {{ .Name }}
+                    </a>
+                </li>
+                {{ end }}
+            </ul>
+        </nav>
+        <button class="theme-toggle" id="theme-toggle">
+            <i class="fa-solid fa-moon"></i> 暗色
+        </button>
+    </header>
+
+    <!-- Container -->
+    <div id="container">
+        <!-- Left Sidebar -->
+        <aside class="left-sidebar">
+            <div class="profile-card">
+                <img src="{{ .Site.Params.avatarURL | default "/img/avatar.svg" | relURL }}" alt="Avatar" class="avatar">
+                <h2 class="author-name">{{ .Site.Params.author | default "作者" }}</h2>
+                <p class="author-bio">{{ "记录学习与生活" }}</p>
+                <div class="social-links">
+                    <a href="https://github.com" title="GitHub" target="_blank">
+                        <i class="fa-brands fa-github"></i>
+                    </a>
+                    <a href="mailto:example@email.com" title="Email" target="_blank">
+                        <i class="fa-solid fa-envelope"></i>
+                    </a>
+                </div>
+            </div>
+
+            <div class="stats">
+                <div class="stat-item">
+                    <span class="stat-label"><i class="fa-solid fa-file-lines"></i> 文章数</span>
+                    <span class="stat-value">{{ len .Site.RegularPages }}</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-label"><i class="fa-solid fa-folder"></i> 分类数</span>
+                    <span class="stat-value">{{ len .Site.Taxonomies.categories }}</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-label"><i class="fa-solid fa-tags"></i> 标签数</span>
+                    <span class="stat-value">{{ len .Site.Taxonomies.tags }}</span>
+                </div>
+            </div>
+
+            <div class="quick-links">
+                <h3><i class="fa-solid fa-link"></i> 快捷链接</h3>
+                <ul>
+                    <li><a href="/"><i class="fa-solid fa-house"></i> 首页</a></li>
+                    <li><a href="/posts/"><i class="fa-solid fa-book"></i> 文章</a></li>
+                    <li><a href="/categories/"><i class="fa-solid fa-layer-group"></i> 分类</a></li>
+                    <li><a href="/tags/"><i class="fa-solid fa-tags"></i> 标签</a></li>
+                    <li><a href="/about/"><i class="fa-solid fa-user"></i> 关于</a></li>
+                </ul>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main id="main-content">
+            {{ block "main" . }}{{ end }}
+        </main>
+
+        <!-- Right Sidebar -->
+        <aside class="right-sidebar">
+            <h3><i class="fa-solid fa-shuffle"></i> 随机文章</h3>
+            {{ $randomPages := where .Site.RegularPages "Type" "posts" | shuffle | first 5 }}
+            {{ range $randomPages }}
+            <div class="random-post">
+                <h4><a href="{{ .RelPermalink }}">{{ .Title }}</a></h4>
+                <div class="meta">
+                    <i class="fa-solid fa-calendar"></i> {{ .Date.Format "2006-01-02" }}
+                    <span class="divider">|</span>
+                    <i class="fa-solid fa-clock"></i> {{ .ReadingTime }} 分钟
+                </div>
+            </div>
+            {{ end }}
+
+            <h3><i class="fa-solid fa-fire"></i> 热门标签</h3>
+            <div class="tags-cloud">
+                {{ range first 10 .Site.Taxonomies.tags.ByCount }}
+                <a href="{{ .Page.RelPermalink }}" class="tag">{{ .Page.Title }}</a>
+                {{ end }}
+            </div>
+        </aside>
+    </div>
+
+    <!-- Custom JS -->
+    <script src="{{ "js/effects.js" | relURL }}"></script>
+    <script src="{{ "js/spider.js" | relURL }}"></script>
+    
+    {{ block "scripts" . }}{{ end }}
+</body>
+</html>

@@ -1,0 +1,19 @@
+{{ if .Paginator.HasNext }}
+<nav class="pagination">
+    {{ if .Paginator.HasPrev }}
+    <a href="{{ .Paginator.Prev.URL }}" class="pagination-prev">
+        <i class="fa-solid fa-chevron-left"></i> 上一页
+    </a>
+    {{ end }}
+
+    <span class="pagination-info">
+        第 {{ .Paginator.PageNumber }} 页 / 共 {{ .Paginator.TotalPages }} 页
+    </span>
+
+    {{ if .Paginator.HasNext }}
+    <a href="{{ .Paginator.Next.URL }}" class="pagination-next">
+        下一页 <i class="fa-solid fa-chevron-right"></i>
+    </a>
+    {{ end }}
+</nav>
+{{ end }}
