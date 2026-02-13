@@ -1,7 +1,0 @@
-# 告诉 GitHub Pages 使用 Hugo 构建
-[build]
-  publish = "public"
-
-[context]
-  [context.production]
-    command = "hugo --gc --minify"
