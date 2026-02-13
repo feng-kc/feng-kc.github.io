@@ -9,6 +9,7 @@ import os
 import sys
 import argparse
 import subprocess
+import json
 from datetime import datetime
 from pathlib import Path
 
@@ -29,6 +30,45 @@ CONTENT_DIR = "content/posts"
 CATEGORIES_DIR = "content/categories"
 TAGS_DIR = "content/tags"
 ARCHETYPE = "archetypes/default.md"
+CONFIG_FILE = "hugo_cli_config.json"
+
+# 默认配置
+DEFAULT_CONFIG = {
+    "auto_push": False,
+    "commit_message": "Update: {type} - {name}"
+}
+
+# 加载配置
+def load_config():
+    """加载配置文件"""
+    if os.path.exists(CONFIG_FILE):
+        try:
+            with open(CONFIG_FILE, 'r', encoding='utf-8') as f:
+                return json.load(f)
+        except Exception as e:
+            print(f"⚠️  配置文件加载失败，使用默认配置: {e}")
+            return DEFAULT_CONFIG
+    return DEFAULT_CONFIG
+
+# 保存配置
+def save_config(config):
+    """保存配置文件"""
+    try:
+        with open(CONFIG_FILE, 'w', encoding='utf-8') as f:
+            json.dump(config, f, indent=2, ensure_ascii=False)
+        print(f"✅ 配置已保存到 {CONFIG_FILE}")
+        return True
+    except Exception as e:
+        print(f"❌ 配置保存失败: {e}")
+        return False
+
+# 获取配置
+def get_config():
+    """获取配置，如果不存在则创建默认配置"""
+    config = load_config()
+    if not os.path.exists(CONFIG_FILE):
+        save_config(config)
+    return config
 
 
 def slugify(text):
@@ -40,12 +80,84 @@ def slugify(text):
     return text.lower()
 
 
+def git_push(content_type, name):
+    """推送到 GitHub"""
+    config = get_config()
+
+    if not config.get('auto_push', False):
+        return True  # 未启用自动推送，跳过
+
+    print(f"\n📤 正在推送到 GitHub...")
+
+    try:
+        # 添加所有更改
+        result = subprocess.run(
+            ["git", "add", "."],
+            capture_output=True,
+            text=True,
+            check=True,
+            encoding='utf-8',
+            errors='ignore'
+        )
+    except subprocess.CalledProcessError as e:
+        print(f"⚠️  Git add 失败: {e.stderr}")
+        return False
+    except FileNotFoundError:
+        print("⚠️  未找到 git 命令")
+        return False
+
+    # 提交更改
+    commit_msg = config.get('commit_message', 'Update: {type} - {name}').format(
+        type=content_type,
+        name=name
+    )
+    try:
+        result = subprocess.run(
+            ["git", "commit", "-m", commit_msg],
+            capture_output=True,
+            text=True,
+            check=True,
+            encoding='utf-8',
+            errors='ignore'
+        )
+        print(f"✅ Git 提交成功: {commit_msg}")
+    except subprocess.CalledProcessError as e:
+        # 可能是没有更改需要提交
+        if "nothing to commit" in e.stderr.lower():
+            print("ℹ️  没有新的更改需要提交")
+            return True
+        print(f"⚠️  Git 提交失败: {e.stderr}")
+        return False
+    except FileNotFoundError:
+        print("⚠️  未找到 git 命令")
+        return False
+
+    # 推送到远程仓库
+    try:
+        result = subprocess.run(
+            ["git", "push"],
+            capture_output=True,
+            text=True,
+            check=True,
+            encoding='utf-8',
+            errors='ignore'
+        )
+        print("✅ 推送到 GitHub 成功！")
+        return True
+    except subprocess.CalledProcessError as e:
+        print(f"⚠️  Git push 失败: {e.stderr}")
+        return False
+    except FileNotFoundError:
+        print("⚠️  未找到 git 命令")
+        return False
+
+
 def run_hugo_new(path, kind=""):
     """运行 hugo new 命令"""
     cmd = ["hugo", "new", path]
     if kind:
         cmd.extend(["--kind", kind])
-    
+
     try:
         result = subprocess.run(cmd, capture_output=True, text=True, check=True, encoding='utf-8', errors='ignore')
         print(f"✅ 创建成功: {path}")
@@ -99,14 +211,17 @@ draft: {str(draft).lower()}
     # 写入文件
     with open(filename, 'w', encoding='utf-8') as f:
         f.write(front_matter)
-    
+
     print(f"✅ 文章创建成功: {filename}")
     print(f"   标题: {title}")
     if categories:
         print(f"   分类: {', '.join(categories)}")
     if tags:
         print(f"   标签: {', '.join(tags)}")
-    
+
+    # 自动推送到 GitHub
+    git_push("文章", title)
+
     return True
 
 
@@ -135,10 +250,14 @@ description: "{description or name}"
     # 写入文件
     with open(filename, 'w', encoding='utf-8') as f:
         f.write(content)
-    
+
     print(f"✅ 分类创建成功: {filename}")
     print(f"   名称: {name}")
     print(f"   提示: 分类文件在 content/categories/ 目录，不会影响 public/")
+
+    # 自动推送到 GitHub
+    git_push("分类", name)
+
     return True
 
 
@@ -167,10 +286,14 @@ description: "{description or name}"
     # 写入文件
     with open(filename, 'w', encoding='utf-8') as f:
         f.write(content)
-    
+
     print(f"✅ 标签创建成功: {filename}")
     print(f"   名称: {name}")
     print(f"   提示: 标签文件在 content/tags/ 目录，不会影响 public/")
+
+    # 自动推送到 GitHub
+    git_push("标签", name)
+
     return True
 
 
@@ -231,6 +354,7 @@ def print_menu():
         table.add_row("4", "构建站点", "运行 hugo 构建命令")
         table.add_row("5", "部署站点", "执行部署脚本")
         table.add_row("6", "一键发布", "创建文章并立即部署")
+        table.add_row("7", "设置", "配置自动推送等选项")
         table.add_row("0", "退出", "退出程序")
         
         console.print(table)
@@ -244,8 +368,79 @@ def print_menu():
         print("  4. 构建站点    - 运行 hugo 构建命令")
         print("  5. 部署站点    - 执行部署脚本")
         print("  6. 一键发布    - 创建文章并立即部署")
+        print("  7. 设置        - 配置自动推送等选项")
         print("  0. 退出        - 退出程序")
         print("=" * 50)
+
+
+def settings_mode():
+    """设置管理"""
+    config = load_config()
+
+    while True:
+        if RICH_AVAILABLE:
+            console.print(Panel.fit(
+                "[bold cyan]配置管理[/bold cyan]\n"
+                "[dim]配置文件的自动推送等选项[/dim]",
+                title="⚙️",
+                border_style="cyan"
+            ))
+
+            table = Table(show_header=True, header_style="bold magenta")
+            table.add_column("选项", style="cyan", justify="center")
+            table.add_column("设置项", style="green")
+            table.add_column("当前值", style="yellow")
+
+            table.add_row("1", "自动推送", "开启" if config.get('auto_push', False) else "关闭")
+            table.add_row("2", "提交消息模板", config.get('commit_message', 'Update: {type} - {name}'))
+            table.add_row("0", "返回主菜单", "")
+
+            console.print(table)
+        else:
+            print("\n" + "=" * 50)
+            print("       配置管理")
+            print("=" * 50)
+            print(f"\n  1. 自动推送        {'开启' if config.get('auto_push', False) else '关闭'}")
+            print(f"  2. 提交消息模板   {config.get('commit_message', 'Update: {{type}} - {{name}}')}")
+            print("  0. 返回主菜单")
+            print("=" * 50)
+
+        if RICH_AVAILABLE:
+            choice = Prompt.ask("\n请选择操作", choices=["0", "1", "2"], default="0")
+        else:
+            choice = input("\n请选择操作 (0-2): ").strip()
+
+        if choice == "1":
+            # 切换自动推送
+            current = config.get('auto_push', False)
+            config['auto_push'] = not current
+            if save_config(config):
+                if RICH_AVAILABLE:
+                    console.print(f"✅ 自动推送已 {'开启' if config['auto_push'] else '关闭'}", style="green")
+                else:
+                    print(f"✅ 自动推送已 {'开启' if config['auto_push'] else '关闭'}")
+
+        elif choice == "2":
+            # 修改提交消息模板
+            if RICH_AVAILABLE:
+                new_msg = Prompt.ask(
+                    "请输入提交消息模板（使用 {type} 和 {name} 占位符）",
+                    default=config.get('commit_message', 'Update: {type} - {name}')
+                )
+            else:
+                new_msg = input(
+                    f"请输入提交消息模板（使用 {{type}} 和 {{name}} 占位符） [当前: {config.get('commit_message', 'Update: {{type}} - {{name}}')}]: "
+                ).strip() or config.get('commit_message', 'Update: {type} - {name}')
+
+            config['commit_message'] = new_msg
+            if save_config(config):
+                if RICH_AVAILABLE:
+                    console.print("✅ 提交消息模板已更新", style="green")
+                else:
+                    print("✅ 提交消息模板已更新")
+
+        elif choice == "0":
+            break
 
 
 def interactive_mode():
@@ -253,14 +448,14 @@ def interactive_mode():
     # 切换到脚本所在目录
     script_dir = os.path.dirname(os.path.abspath(__file__))
     os.chdir(script_dir)
-    
+
     while True:
         print_menu()
-        
+
         if RICH_AVAILABLE:
-            choice = Prompt.ask("\n请选择操作", choices=["0", "1", "2", "3", "4", "5", "6"], default="0")
+            choice = Prompt.ask("\n请选择操作", choices=["0", "1", "2", "3", "4", "5", "6", "7"], default="0")
         else:
-            choice = input("\n请选择操作 (0-6): ").strip()
+            choice = input("\n请选择操作 (0-7): ").strip()
         
         if choice == "1":
             # 新建文章
@@ -315,14 +510,18 @@ def interactive_mode():
                 title = input("请输入文章标题: ").strip()
                 categories_str = input("请输入分类（多个用逗号分隔，可选）: ").strip()
                 tags_str = input("请输入标签（多个用逗号分隔，可选）: ").strip()
-            
+
             categories = [c.strip() for c in categories_str.split(",") if c.strip()] if categories_str else None
             tags = [t.strip() for t in tags_str.split(",") if t.strip()] if tags_str else None
-            
+
             if new_post(title, categories, tags, draft=False):
                 if build_site():
                     deploy_site()
-        
+
+        elif choice == "7":
+            # 设置
+            settings_mode()
+
         elif choice == "0":
             if RICH_AVAILABLE:
                 console.print("\n[dim]再见！[/dim] 👋")
@@ -348,6 +547,7 @@ def main():
   python hugo_cli.py tag "教程" -d "教程类文章"
   python hugo_cli.py build
   python hugo_cli.py deploy
+  python hugo_cli.py settings      # 配置自动推送等选项
         """
     )
     
@@ -384,7 +584,10 @@ def main():
     
     # 交互式界面
     subparsers.add_parser('interactive', help='启动交互式菜单界面')
-    
+
+    # 设置命令
+    subparsers.add_parser('settings', help='配置管理')
+
     args = parser.parse_args()
     
     # 切换到脚本所在目录
@@ -416,10 +619,13 @@ def main():
     elif args.command == 'publish':
         categories = args.categories.split(',') if args.categories else None
         tags = args.tags.split(',') if args.tags else None
-        
+
         if new_post(args.title, categories, tags, draft=False):
             if build_site():
                 deploy_site()
+
+    elif args.command == 'settings':
+        settings_mode()
 
 
 if __name__ == '__main__':

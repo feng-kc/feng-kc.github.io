@@ -118,21 +118,28 @@
 }
 
 .highlight pre {
-  background: var(--code-bg-light);
+  background: #fafafa;
   border-radius: 10px;
   padding: 20px;
   overflow-x: auto;
 }
 
 .dark .highlight pre {
-  background: var(--code-bg-dark);
+  background: #2d2d2d !important;
 }
 
 .highlight code {
   font-family: 'Cascadia Code', 'Consolas', 'Courier New', monospace;
   font-size: 0.9rem;
   line-height: 1.6;
-  color: var(--text-primary);
+}
+
+/* 亮色模式下的代码块 */
+.highlight pre {
+  background: #fafafa;
+  border-radius: 10px;
+  padding: 20px;
+  overflow-x: auto;
 }
 
 /* ==================== 欢迎卡片样式 ==================== */

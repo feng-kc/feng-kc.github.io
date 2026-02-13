@@ -9,7 +9,14 @@
     
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-    
+
+    <!-- KaTeX CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+
+    <!-- Chroma Syntax Highlighting -->
+    <link rel="stylesheet" href="{{ "css/chroma-light.css" | relURL }}" id="chroma-light">
+    <link rel="stylesheet" href="{{ "css/chroma-dark.css" | relURL }}" id="chroma-dark" disabled>
+
     <!-- Custom CSS -->
     <link rel="stylesheet" href="{{ "css/custom.css" | relURL }}">
     <link rel="stylesheet" href="{{ "css/custom-additions.css" | relURL }}">
@@ -128,6 +135,19 @@
     <!-- Custom JS -->
     <script src="{{ "js/effects.js" | relURL }}"></script>
     <script src="{{ "js/spider.js" | relURL }}"></script>
+    
+    <!-- KaTeX JS -->
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"
+        onload="renderMathInElement(document.body, {
+            delimiters: [
+                {left: '$$', right: '$$', display: true},
+                {left: '$', right: '$', display: false},
+                {left: '\\[', right: '\\]', display: true},
+                {left: '\\(', right: '\\)', display: false}
+            ]
+        });">
+    </script>
     
     {{ block "scripts" . }}{{ end }}
 </body>

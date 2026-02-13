@@ -121,10 +121,7 @@ function initTOC() {
     // 提取所有标题
     const headings = articleContent.querySelectorAll('h1, h2, h3, h4, h5, h6');
 
-    if (headings.length === 0) {
-        tocToggle.style.display = 'none';
-        return;
-    }
+    // 即使没有标题也显示目录，只是目录为空
 
     // 构建目录结构
     const tocData = [];
@@ -250,9 +247,20 @@ function initTOC() {
         const savedPosition = localStorage.getItem('tocPosition');
         if (savedPosition) {
             const pos = JSON.parse(savedPosition);
-            tocFloat.style.right = 'auto';
-            tocFloat.style.left = pos.left + 'px';
-            tocFloat.style.top = pos.top + 'px';
+            const mainContent = document.getElementById('main-content');
+            if (mainContent) {
+                const mainRect = mainContent.getBoundingClientRect();
+                // 确保保存的位置在阅读区内
+                const clampedLeft = Math.max(mainRect.left + 10, Math.min(pos.left, mainRect.right - tocFloat.offsetWidth - 10));
+                const clampedTop = Math.max(mainRect.top + 10, Math.min(pos.top, mainRect.bottom - tocFloat.offsetHeight - 10));
+                tocFloat.style.right = 'auto';
+                tocFloat.style.left = clampedLeft + 'px';
+                tocFloat.style.top = clampedTop + 'px';
+            } else {
+                tocFloat.style.right = 'auto';
+                tocFloat.style.left = pos.left + 'px';
+                tocFloat.style.top = pos.top + 'px';
+            }
         }
 
         tocToggle.addEventListener('mousedown', (e) => {
@@ -261,11 +269,11 @@ function initTOC() {
             tocFloat.dataset.isDragging = 'false';
             startX = e.clientX;
             startY = e.clientY;
-            
+
             const rect = tocFloat.getBoundingClientRect();
             initialRight = window.innerWidth - rect.right;
             initialTop = rect.top;
-            
+
             tocFloat.style.cursor = 'grabbing';
             tocToggle.style.cursor = 'grabbing';
             e.preventDefault();
@@ -273,29 +281,50 @@ function initTOC() {
 
         document.addEventListener('mousemove', (e) => {
             if (!isDragging) return;
-            
+
             const deltaX = e.clientX - startX;
             const deltaY = e.clientY - startY;
-            
+
             // 如果移动距离超过5px，认为是拖动而非点击
             if (Math.abs(deltaX) > 5 || Math.abs(deltaY) > 5) {
                 hasMoved = true;
                 tocFloat.dataset.isDragging = 'true';
             }
-            
+
             const newRight = initialRight - deltaX;
             const newTop = initialTop + deltaY;
-            
-            // 限制在视口范围内
-            const maxRight = window.innerWidth - tocFloat.offsetWidth - 10;
-            const maxTop = window.innerHeight - tocFloat.offsetHeight - 10;
-            
-            const clampedRight = Math.max(10, Math.min(newRight, maxRight));
-            const clampedTop = Math.max(70, Math.min(newTop, maxTop));
-            
-            tocFloat.style.right = 'auto';
-            tocFloat.style.left = (window.innerWidth - tocFloat.offsetWidth - clampedRight) + 'px';
-            tocFloat.style.top = clampedTop + 'px';
+
+            // 获取主内容区域边界，限制在阅读区内
+            const mainContent = document.getElementById('main-content');
+            let clampedRight, clampedTop;
+
+            if (mainContent) {
+                const mainRect = mainContent.getBoundingClientRect();
+                const newLeft = window.innerWidth - tocFloat.offsetWidth - newRight;
+
+                // 限制在阅读区范围内
+                const minLeft = mainRect.left + 10;
+                const maxLeft = mainRect.right - tocFloat.offsetWidth - 10;
+                const minTop = mainRect.top + 10;
+                const maxTop = mainRect.bottom - tocFloat.offsetHeight - 10;
+
+                const clampedLeft = Math.max(minLeft, Math.min(newLeft, maxLeft));
+                clampedTop = Math.max(minTop, Math.min(newTop, maxTop));
+
+                tocFloat.style.right = 'auto';
+                tocFloat.style.left = clampedLeft + 'px';
+                tocFloat.style.top = clampedTop + 'px';
+            } else {
+                // 如果没有找到主内容区域，则限制在视口范围内
+                const maxRight = window.innerWidth - tocFloat.offsetWidth - 10;
+                const maxTop = window.innerHeight - tocFloat.offsetHeight - 10;
+
+                clampedRight = Math.max(10, Math.min(newRight, maxRight));
+                clampedTop = Math.max(70, Math.min(newTop, maxTop));
+
+                tocFloat.style.right = clampedRight + 'px';
+                tocFloat.style.top = clampedTop + 'px';
+            }
         });
 
         document.addEventListener('mouseup', () => {
@@ -303,12 +332,12 @@ function initTOC() {
                 isDragging = false;
                 tocFloat.style.cursor = 'grab';
                 tocToggle.style.cursor = 'grab';
-                
+
                 // 延迟重置isDragging标志，确保click事件能检测到这个状态
                 setTimeout(() => {
                     tocFloat.dataset.isDragging = 'false';
                 }, 50);
-                
+
                 // 保存位置到localStorage
                 const rect = tocFloat.getBoundingClientRect();
                 localStorage.setItem('tocPosition', JSON.stringify({

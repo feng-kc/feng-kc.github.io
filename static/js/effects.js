@@ -257,6 +257,19 @@ function initThemeToggle() {
   document.body.classList.toggle('dark', isDark);
   toggleBtn.innerHTML = isDark ? '<i class="fa-solid fa-sun"></i>' : '<i class="fa-solid fa-moon"></i>';
 
+  // 切换Chroma样式表
+  function toggleChromaTheme(dark) {
+    const chromaLight = document.getElementById('chroma-light');
+    const chromaDark = document.getElementById('chroma-dark');
+    if (chromaLight && chromaDark) {
+      chromaLight.disabled = dark;
+      chromaDark.disabled = !dark;
+    }
+  }
+
+  // 初始化时应用Chroma主题
+  toggleChromaTheme(isDark);
+
   // 创建全屏切换遮罩
   const themeOverlay = document.createElement('div');
   themeOverlay.className = 'theme-overlay';
@@ -276,6 +289,9 @@ function initThemeToggle() {
       document.body.classList.toggle('dark', isDark);
       toggleBtn.innerHTML = isDark ? '<i class="fa-solid fa-sun"></i>' : '<i class="fa-solid fa-moon"></i>';
       localStorage.setItem('theme', isDark ? 'dark' : 'light');
+
+      // 切换Chroma主题
+      toggleChromaTheme(isDark);
 
       // 更新遮罩图标
       const icon = themeOverlay.querySelector('i');

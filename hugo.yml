@@ -7,6 +7,17 @@ defaultContentLanguage: "zh"
 enableInlineShortcodes: true
 enableEmoji: true
 enableRobotsTXT: true
+markup:
+  goldmark:
+    renderer:
+      unsafe: true
+  highlight:
+    noClasses: false
+    lineNos: false
+    codeFences: true
+  katex:
+    enable: true
+    html: true
 
 pagination:
   pagerSize: 10
