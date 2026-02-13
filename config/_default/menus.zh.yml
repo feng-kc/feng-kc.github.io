@@ -23,3 +23,8 @@ main:
     url: "/about/"
     weight: 5
     pre: '<i class="fa-solid fa-user"></i>'
+
+  - name: "计划表"
+    url: "/plan/"
+    weight: 6
+    pre: '<i class="fa-solid fa-calendar-check"></i>'
