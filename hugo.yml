@@ -57,8 +57,8 @@ params:
   description: "FengKC の Blog，分享技术、记录生活"
 
   # 头像和社交信息
-  avatarURL: "/img/minecraft.avatar.png"
-  favicon: "favicon.ico"
+  avatarURL: "https://cdn.luogu.com.cn/upload/image_hosting/o869vlci.png"
+  favicon: "https://cdn.luogu.com.cn/upload/image_hosting/o869vlci.png"
   
   # 社交链接
   social:
@@ -80,7 +80,7 @@ params:
   fullWidthHeader: false
   showScrollToTop: true
   showFooter: true
-  footerLogo: "/img/minecraft.avatar.png"
+  footerLogo: "https://cdn.luogu.com.cn/upload/image_hosting/o869vlci.png"
   footerCopyright: "© 2026 FengKC's Blog"
   customCSS: ["css/custom.css"]
   customJS: ["js/effects.js", "js/spider.js"]
