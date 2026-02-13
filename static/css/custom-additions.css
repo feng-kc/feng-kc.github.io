@@ -28,7 +28,7 @@
 }
 
 .hero-typewriter {
-  font-family: 'ZCOOL KuaiLe', 'KaiTi', '微软雅黑', sans-serif;
+  font-family: var(--font-title);
   font-size: 3.5rem;
   color: var(--text-primary);
   margin-bottom: 20px;
@@ -157,7 +157,7 @@
 }
 
 .welcome-card h3 {
-  font-family: 'ZCOOL KuaiLe', 'KaiTi', '微软雅黑', sans-serif;
+  font-family: var(--font-title);
   font-size: 1.8rem;
   color: var(--text-primary);
   margin-bottom: 15px;
@@ -207,7 +207,7 @@
 
 /* ==================== 章节标题样式 ==================== */
 .section-title {
-  font-family: 'ZCOOL KuaiLe', 'KaiTi', '微软雅黑', sans-serif;
+  font-family: var(--font-title);
   font-size: 2rem;
   color: var(--text-primary);
   margin: 40px 0 25px;

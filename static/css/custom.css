@@ -1,5 +1,5 @@
 /* ==================== 全局字体设置 ==================== */
-@import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;600;700&family=Ma+Shan+Zheng&family=ZCOOL+KuaiLe&family=KaiTi&family=Cascadia+Code:wght@400;500;600&family=Consolas&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Cascadia+Code:wght@400;500;600&display=swap');
 
 :root {
   --bg-primary: #faf9f6;
@@ -17,6 +17,14 @@
   /* 柔和渐变 */
   --gradient-soft: linear-gradient(135deg, #faf9f6 0%, #f5f3ef 50%, #efebe5 100%);
   --gradient-accent: linear-gradient(135deg, #e8c4a0 0%, #d4a574 100%);
+}
+
+/* 使用系统字体和Web字体 */
+:root {
+  --font-handwriting: 'KaiTi', 'STKaiti', '楷体', cursive;
+  --font-title: 'KaiTi', 'STKaiti', '楷体', '微软雅黑', sans-serif;
+  --font-body: 'KaiTi', 'STKaiti', '楷体', '微软雅黑', sans-serif;
+  --font-code: 'Cascadia Code', 'Consolas', 'Courier New', monospace;
 }
 
 html, body {
@@ -57,7 +65,7 @@ html, body {
 .fade-in-section.delay-5 { transition-delay: 0.5s; }
 
 body {
-  font-family: 'KaiTi', 'Ma Shan Zheng', '微软雅黑', sans-serif;
+  font-family: var(--font-body);
   background: var(--gradient-soft);
   color: var(--text-primary);
   overflow: hidden !important;
@@ -65,7 +73,7 @@ body {
 
 /* 标题字体 */
 h1, h2, h3, h4, h5, h6 {
-  font-family: 'ZCOOL KuaiLe', 'KaiTi', '微软雅黑', sans-serif;
+  font-family: var(--font-title);
   font-weight: 600;
   color: var(--text-primary);
 }
@@ -100,7 +108,7 @@ header#top-nav {
 }
 
 header#top-nav .logo {
-  font-family: 'Dancing Script', cursive;
+  font-family: var(--font-handwriting);
   font-size: 1.8rem;
   color: var(--text-primary);
   text-decoration: none;
@@ -653,7 +661,7 @@ main#main-content .article-card .meta {
 }
 
 .hero-typewriter {
-  font-family: 'ZCOOL KuaiLe', 'KaiTi', '微软雅黑', sans-serif;
+  font-family: var(--font-title);
   font-size: 3.5rem;
   color: var(--text-primary);
   margin-bottom: 20px;
@@ -697,7 +705,7 @@ main#main-content .article-card .meta {
 }
 
 .section-title {
-  font-family: 'ZCOOL KuaiLe', 'KaiTi', '微软雅黑', sans-serif;
+  font-family: var(--font-title);
   font-size: 2rem;
   color: var(--text-primary);
   margin-bottom: 30px;
@@ -721,7 +729,7 @@ main#main-content .article-card .meta {
 }
 
 .page-title {
-  font-family: 'Dancing Script', cursive;
+  font-family: var(--font-handwriting);
   font-size: 2.5rem;
   color: var(--text-primary);
   margin-bottom: 15px;
@@ -773,7 +781,7 @@ main#main-content .article-card .meta {
 }
 
 .article-title {
-  font-family: 'Dancing Script', cursive;
+  font-family: var(--font-handwriting);
   font-size: 2.5rem;
   color: var(--text-primary);
   margin-bottom: 20px;
@@ -1095,7 +1103,7 @@ main#main-content .article-card .meta {
   transition: opacity 0.3s ease, transform 0.3s ease, top 0.3s ease, left 0.3s ease;
   pointer-events: none;
   z-index: 50;
-  font-family: 'ZCOOL KuaiLe', 'KaiTi', '微软雅黑', sans-serif;
+  font-family: var(--font-title);
   white-space: nowrap;
 }
 
@@ -1358,7 +1366,7 @@ main#main-content .article-card .meta {
 }
 
 .related-posts h3 {
-  font-family: 'Dancing Script', cursive;
+  font-family: var(--font-handwriting);
   font-size: 1.5rem;
   margin-bottom: 20px;
   color: var(--text-primary);
