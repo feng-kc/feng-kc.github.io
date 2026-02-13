@@ -20,9 +20,9 @@
 /* 使用系统字体 */
 :root {
   --font-handwriting: 'KaiTi', 'STKaiti', '楷体', cursive;
-  --font-title: 'KaiTi', 'STKaiti', '楷体', '微软雅黑', sans-serif;
-  --font-body: 'KaiTi', 'STKaiti', '楷体', '微软雅黑', sans-serif;
-  --font-code: 'Consolas', 'Monaco', 'Courier New', monospace;
+  --font-title: '微软雅黑', 'KaiTi', 'STKaiti', '楷体', sans-serif;
+  --font-body: '微软雅黑', 'KaiTi', 'STKaiti', '楷体', sans-serif;
+  --font-code: 'Cascadia Code', 'Consolas', 'Monaco', 'Courier New', monospace;
 }
 
 html, body {
