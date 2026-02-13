@@ -1,6 +1,4 @@
 /* ==================== 全局字体设置 ==================== */
-@import url('https://fonts.googleapis.com/css2?family=Cascadia+Code:wght@400;500;600&display=swap');
-
 :root {
   --bg-primary: #faf9f6;
   --bg-secondary: #f5f3ef;
@@ -19,12 +17,12 @@
   --gradient-accent: linear-gradient(135deg, #e8c4a0 0%, #d4a574 100%);
 }
 
-/* 使用系统字体和Web字体 */
+/* 使用系统字体 */
 :root {
   --font-handwriting: 'KaiTi', 'STKaiti', '楷体', cursive;
   --font-title: 'KaiTi', 'STKaiti', '楷体', '微软雅黑', sans-serif;
   --font-body: 'KaiTi', 'STKaiti', '楷体', '微软雅黑', sans-serif;
-  --font-code: 'Cascadia Code', 'Consolas', 'Courier New', monospace;
+  --font-code: 'Consolas', 'Monaco', 'Courier New', monospace;
 }
 
 html, body {
