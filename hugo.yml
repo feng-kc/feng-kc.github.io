@@ -1,6 +1,6 @@
 baseURL: "https://feng-kc.github.io"
 languageCode: "zh-CN"
-title: "FengKC's Blog"
+title: "FengKC の Blog"
 theme: "blowfish"
 defaultContentLanguage: "zh"
 
@@ -54,7 +54,7 @@ params:
   Author:
     name: "FengKC"
     email: "fengkc@yandex.com"
-  description: "FengKC's Blog，分享技术、记录生活"
+  description: "FengKC の Blog，分享技术、记录生活"
 
   # 头像和社交信息
   avatarURL: "https://cdn.luogu.com.cn/upload/image_hosting/o869vlci.png"
@@ -64,7 +64,7 @@ params:
   social:
     github: "https://github.com/feng-kc"
     email: "mailto:fengkc@yandex.com"
-  homeTitle: "欢迎来到FengKC's Blog"
+  homeTitle: "欢迎来到FengKC の Blog"
   homeSubtitle: "分享技术、记录生活"
   dateFormat: "2006-01-02"
   appearance: auto
