@@ -27,9 +27,9 @@
     <!-- Hero Section -->
     <div class="hero-section">
         <div class="hero-content">
-            <h1 class="hero-typewriter" data-text="{{ .Site.Params.homeTitle | default "欢迎来到我的博客" }}"></h1>
-            <p class="hero-subtitle">{{ .Site.Params.homeSubtitle | default "分享技术、记录生活" }}</p>
-            <a href="#main-content" class="enter-btn">进入博客 <i class="fa-solid fa-arrow-down"></i></a>
+            <h1 class="hero-typewriter" data-text="{{ .Site.Params.homeTitle }}"></h1>
+            <p class="hero-subtitle">{{ .Site.Params.homeSubtitle }}</p>
+            <a href="#main-content" class="enter-btn">{{ .Site.Language.Params.enterText }} <i class="fa-solid fa-arrow-down"></i></a>
         </div>
     </div>
 
@@ -60,8 +60,8 @@
         <aside class="left-sidebar">
             <div class="profile-card">
                 <img src="{{ .Site.Params.avatarURL | default "/img/avatar.svg" | relURL }}" alt="Avatar" class="avatar">
-                <h2 class="author-name">{{ .Site.Params.author | default "作者" }}</h2>
-                <p class="author-bio">{{ "记录学习与生活" }}</p>
+                <h2 class="author-name">{{ .Site.Language.Params.author }}</h2>
+                <p class="author-bio">{{ .Site.Language.Params.bio }}</p>
                 <div class="social-links">
                     {{ with .Site.Params.social.github }}
                     <a href="{{ . }}" title="GitHub" target="_blank">

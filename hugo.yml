@@ -98,6 +98,33 @@ params:
       - summary
       - content
 
+languages:
+  zh:
+    languageName: "简体中文"
+    languageCode: "zh-CN"
+    languageDirection: "ltr"
+    weight: 1
+    title: "FengKC の Blog"
+    copyright: "© 2026 FengKC's Blog"
+    params:
+      displayName: "简体中文"
+      isoCode: "zh"
+      rtl: false
+      dateFormat: "2006-01-02"
+      logo: "/img/avatar.svg"
+      description: "FengKC的个人博客，分享技术、记录生活"
+      author: "FengKC"
+      bio: "记录学习与生活"
+      enterText: "进入博客"
+      welcomeTitle: "欢迎来到FengKC の Blog"
+      welcomeText: "这里是一个温馨的个人空间，记录着我的学习心得、技术分享和生活点滴。希望你能在这里找到感兴趣的内容，也欢迎多多交流！"
+      postsTitle: "最新文章"
+      readMore: "查看更多"
+      viewMore: "继续查看更多文章"
+      articleLabel: "篇文章"
+      categoryLabel: "个分类"
+      tagLabel: "个标签"
+
 menu:
   main:
     - name: "首页"
@@ -120,3 +147,11 @@ menu:
       url: "/about/"
       weight: 5
       pre: '<i class="fa-solid fa-user"></i>'
+    - name: "计划表"
+      url: "/plan/"
+      weight: 6
+      pre: '<i class="fa-solid fa-calendar-check"></i>'
+    - name: "软件转载"
+      url: "/software/"
+      weight: 7
+      pre: '<i class="fa-solid fa-download"></i>'

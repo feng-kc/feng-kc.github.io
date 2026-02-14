@@ -3,25 +3,25 @@
 <div id="main-content">
     <!-- 欢迎卡片 - 只在首页显示 -->
     <div class="welcome-card fade-in-section">
-        <h3><i class="fa-solid fa-heart"></i> 欢迎来到FengKC の Blog</h3>
-        <p>这里是一个温馨的个人空间，记录着我的学习心得、技术分享和生活点滴。希望你能在这里找到感兴趣的内容，也欢迎多多交流！</p>
+        <h3><i class="fa-solid fa-heart"></i> {{ .Site.Language.Params.welcomeTitle }}</h3>
+        <p>{{ .Site.Language.Params.welcomeText }}</p>
         <div class="welcome-stats">
             <div class="welcome-stat">
                 <i class="fa-solid fa-file-lines"></i>
-                <span>{{ len (where .Site.RegularPages "Type" "posts") }} 篇文章</span>
+                <span>{{ len (where .Site.RegularPages "Type" "posts") }} {{ .Site.Language.Params.articleLabel }}</span>
             </div>
             <div class="welcome-stat">
                 <i class="fa-solid fa-layer-group"></i>
-                <span>{{ len .Site.Taxonomies.categories }} 个分类</span>
+                <span>{{ len .Site.Taxonomies.categories }} {{ .Site.Language.Params.categoryLabel }}</span>
             </div>
             <div class="welcome-stat">
                 <i class="fa-solid fa-tags"></i>
-                <span>{{ len .Site.Taxonomies.tags }} 个标签</span>
+                <span>{{ len .Site.Taxonomies.tags }} {{ .Site.Language.Params.tagLabel }}</span>
             </div>
         </div>
     </div>
 
-    <h2 class="section-title fade-in-section delay-1"><i class="fa-solid fa-clock"></i> 最新文章</h2>
+    <h2 class="section-title fade-in-section delay-1"><i class="fa-solid fa-clock"></i> {{ .Site.Language.Params.postsTitle }}</h2>
     <div class="posts-list">
         {{ $posts := where .Site.RegularPages "Type" "posts" }}
         {{ range first 5 $posts }}
@@ -29,7 +29,7 @@
             <h2><a href="{{ .RelPermalink }}">{{ .Title }}</a></h2>
             <div class="summary">{{ .Summary }}</div>
             <div class="read-more-btn">
-                <a href="{{ .RelPermalink }}" class="btn-small">查看更多 <i class="fa-solid fa-arrow-right"></i></a>
+                <a href="{{ .RelPermalink }}" class="btn-small">{{ .Site.Language.Params.readMore }} <i class="fa-solid fa-arrow-right"></i></a>
             </div>
             <div class="meta">
                 <span><i class="fa-solid fa-calendar"></i> {{ .Date.Format "2006-01-02" }}</span>
@@ -43,7 +43,7 @@
     {{ $posts := where .Site.RegularPages "Type" "posts" }}
     {{ if gt (len $posts) 5 }}
     <div class="view-more fade-in-section">
-        <a href="/posts/" class="btn">继续查看更多文章 <i class="fa-solid fa-arrow-right"></i></a>
+        <a href="/posts/" class="btn">{{ .Site.Language.Params.viewMore }} <i class="fa-solid fa-arrow-right"></i></a>
     </div>
     {{ end }}
 </div>
