@@ -143,15 +143,16 @@ menu:
       url: "/tags/"
       weight: 4
       pre: '<i class="fa-solid fa-tags"></i>'
+    - name: "计划"
+      url: "/plan/"
+      weight: 5
+      pre: '<i class="fa-solid fa-calendar-check"></i>'
+    - name: "软件"
+      url: "/software/"
+      weight: 6
+      pre: '<i class="fa-solid fa-download"></i>'
     - name: "关于"
       url: "/about/"
-      weight: 5
-      pre: '<i class="fa-solid fa-user"></i>'
-    - name: "计划表"
-      url: "/plan/"
-      weight: 6
-      pre: '<i class="fa-solid fa-calendar-check"></i>'
-    - name: "软件转载"
-      url: "/software/"
       weight: 7
-      pre: '<i class="fa-solid fa-download"></i>'
+      pre: '<i class="fa-solid fa-user"></i>'
+
