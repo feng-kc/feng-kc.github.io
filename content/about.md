@@ -48,9 +48,9 @@ draft: false
 
 ### 网站入口
 
-(GitHub Pages)[https://feng-kc.github.io] 特点：GitHub Pages原站，国内访问可能慢，连接github仓库，实时更新  
-(Cloudflare Pages)[https://feng-kc.pages.dev] 特点：Cloudflare Pages原站，有全球Cloudflare网络支持，连接github仓库，实时更新  
-(Cloudflare Workers)[https://blog.fengkc.workers.dev] 特点：GitHub Pages反代站，有全球Cloudflare网络支持，连接github pages，实时更新，国内可能无法访问  
+[GitHub Pages](https://feng-kc.github.io) 特点：GitHub Pages原站，国内访问可能慢，连接github仓库，实时更新  
+[Cloudflare Pages](https://feng-kc.pages.dev) 特点：Cloudflare Pages原站，有全球Cloudflare网络支持，连接github仓库，实时更新  
+[Cloudflare Workers](https://blog.fengkc.workers.dev) 特点：GitHub Pages反代站，有全球Cloudflare网络支持，连接github pages，实时更新，国内可能无法访问  
 
 ```
 #注：当站点无法打开显示链接已重置什么的，直接Shift+F5刷新即可
