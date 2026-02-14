@@ -28,3 +28,8 @@ main:
     url: "/plan/"
     weight: 6
     pre: '<i class="fa-solid fa-calendar-check"></i>'
+
+  - name: "软件转载"
+    url: "/software/"
+    weight: 7
+    pre: '<i class="fa-solid fa-download"></i>'
