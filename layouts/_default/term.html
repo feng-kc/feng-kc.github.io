@@ -1,0 +1,49 @@
+{{ define "main" }}
+<!-- 单个分类/标签页面 -->
+<div class="page-header">
+    <h1 class="page-title">
+        {{ if eq .Data.Plural "categories" }}
+        <i class="fa-solid fa-folder"></i> {{ .Title }}
+        {{ else if eq .Data.Plural "tags" }}
+        <i class="fa-solid fa-tag"></i> {{ .Title }}
+        {{ else }}
+        <i class="fa-solid fa-bookmark"></i> {{ .Title }}
+        {{ end }}
+    </h1>
+    <div class="page-description">
+        <span><i class="fa-solid fa-file-lines"></i> 共 {{ len .Pages }} 篇文章</span>
+    </div>
+    {{ if .Content }}
+    <div class="page-content">{{ .Content }}</div>
+    {{ end }}
+</div>
+
+<!-- 文章列表 -->
+{{ if gt (len .Pages) 0 }}
+<div class="posts-list">
+    {{ range .Pages }}
+    <article class="article-card fade-in-section">
+        <h2><a href="{{ .RelPermalink }}">{{ .Title }}</a></h2>
+        <div class="summary">{{ .Summary }}</div>
+        <div class="read-more-btn">
+            <a href="{{ .RelPermalink }}" class="btn-small">查看更多 <i class="fa-solid fa-arrow-right"></i></a>
+        </div>
+        <div class="meta">
+            <span><i class="fa-solid fa-calendar"></i> {{ .Date.Format "2006-01-02" }}</span>
+            <span><i class="fa-solid fa-clock"></i> {{ .ReadingTime }} 分钟</span>
+            {{ with .Params.categories }}
+            <span><i class="fa-solid fa-folder"></i> {{ range . }}{{ . }} {{ end }}</span>
+            {{ end }}
+        </div>
+    </article>
+    {{ end }}
+</div>
+
+<!-- 分页 -->
+{{ partial "pagination.html" . }}
+{{ else }}
+<div class="empty-state">
+    <p><i class="fa-solid fa-inbox"></i> 该分类下暂无文章</p>
+</div>
+{{ end }}
+{{ end }}

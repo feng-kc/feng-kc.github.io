@@ -1,10 +1,13 @@
 ---
 title: "Hugo博客搭建指南"
-date: 2025-02-10T10:00:00+08:00
+date: 2026-02-14T11:00:00+08:00
 draft: false
-author: "作者"
-categories: ["技术"]
-tags: ["Hugo", "博客", "教程"]
+categories:
+  - 技术
+tags:
+  - Hugo
+  - 博客
+  - 教程
 summary: "详细介绍如何使用Hugo搭建个人博客，包括安装、配置、主题选择等。"
 ---
 

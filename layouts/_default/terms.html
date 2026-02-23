@@ -1,0 +1,43 @@
+{{ define "main" }}
+<!-- 分类列表页面 -->
+<div class="page-header">
+    <h1 class="page-title">
+        <i class="fa-solid fa-layer-group"></i> {{ .Title }}
+    </h1>
+    {{ if .Content }}
+    <div class="page-description">{{ .Content }}</div>
+    {{ end }}
+</div>
+
+<!-- 分类列表 -->
+<div class="categories-list fade-in-section">
+    {{ if gt (len .Data.Terms) 0 }}
+        {{ range $name, $taxonomy := .Data.Terms }}
+        <article class="category-card fade-in-section">
+            <h2 class="category-title">
+                <a href="{{ .Page.RelPermalink }}">
+                    <i class="fa-solid fa-folder"></i> {{ .Page.Title }}
+                </a>
+            </h2>
+            <div class="category-meta">
+                <span><i class="fa-solid fa-file-lines"></i> {{ len $taxonomy }} 篇文章</span>
+            </div>
+            {{ if gt (len $taxonomy) 0 }}
+            <div class="category-posts">
+                {{ range first 3 $taxonomy }}
+                <a href="{{ .Page.RelPermalink }}" class="category-post-link">{{ .Page.Title }}</a>
+                {{ end }}
+                {{ if gt (len $taxonomy) 3 }}
+                <span class="more-posts">还有 {{ sub (len $taxonomy) 3 }} 篇...</span>
+                {{ end }}
+            </div>
+            {{ end }}
+        </article>
+        {{ end }}
+    {{ else }}
+    <div class="empty-state">
+        <p><i class="fa-solid fa-inbox"></i> 暂无分类</p>
+    </div>
+    {{ end }}
+</div>
+{{ end }}

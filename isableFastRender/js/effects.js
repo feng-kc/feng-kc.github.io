@@ -343,16 +343,12 @@ function initPageAnimations() {
   const animatedElements = document.querySelectorAll(
     '.article-card, .article-full, .section-title, ' +
     '.profile-card, .stats, .quick-links, .random-post, .tags-cloud, .welcome-card, ' +
-    '.category-card, .categories-list, .tags-list'
+    '.category-card'
   );
 
   animatedElements.forEach((el, index) => {
-    if (!el.classList.contains('fade-in-section')) {
-      el.classList.add('fade-in-section');
-    }
-    if (!el.classList.contains('categories-list') && !el.classList.contains('tags-list')) {
-      el.classList.add(`delay-${(index % 5) + 1}`);
-    }
+    el.classList.add('fade-in-section');
+    el.classList.add(`delay-${(index % 5) + 1}`);
   });
 
   // 使用IntersectionObserver触发动画
@@ -399,13 +395,6 @@ function initHeadingAnchors() {
   const headings = document.querySelectorAll('.article-content h1, .article-content h2, .article-content h3, .article-content h4, .article-content h5, .article-content h6');
 
   headings.forEach(heading => {
-    // 获取标题级别
-    const level = parseInt(heading.tagName.charAt(1));
-
-    // 为标题添加锚点符号
-    const anchorSymbol = '#'.repeat(level);
-    heading.setAttribute('data-anchor', anchorSymbol);
-
     // 查找标题内的锚点div id
     const anchorDiv = heading.querySelector('.anchor');
     if (!anchorDiv || !anchorDiv.id) return;

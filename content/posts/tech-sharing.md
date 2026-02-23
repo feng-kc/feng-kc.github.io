@@ -1,10 +1,13 @@
 ---
 title: "技术分享：前端特效实现"
-date: 2025-02-09T10:00:00+08:00
+date: 2026-02-14T12:00:00+08:00
 draft: false
-author: "作者"
-categories: ["技术"]
-tags: ["前端", "特效", "JavaScript"]
+categories:
+  - 技术
+tags:
+  - 前端
+  - 特效
+  - JavaScript
 summary: "分享几种常用的前端特效实现方法，包括烟花、星空、粒子效果等。"
 ---
 

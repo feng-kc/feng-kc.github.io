@@ -1,7 +1,7 @@
 baseURL: "https://feng-kc.github.io"
 languageCode: "zh-CN"
 title: "FengKC の Blog"
-theme: "blowfish"
+theme: "paper"
 defaultContentLanguage: "zh"
 
 enableInlineShortcodes: true
@@ -42,10 +42,8 @@ permalinks:
   posts: /:slug
 
 taxonomies:
-  tag: tags
   category: categories
-  author: authors
-  series: series
+  tag: tags
 
 params:
   author:
