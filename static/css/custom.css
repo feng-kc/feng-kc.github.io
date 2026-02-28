@@ -19,7 +19,7 @@
 
 /* 使用系统字体 */
 :root {
-  --font-handwriting: 'KaiTi', 'STKaiti', '楷体', cursive;
+  --font-handwriting: '微软雅黑', 'KaiTi', 'STKaiti', '楷体', cursive;
   --font-title: '微软雅黑', 'KaiTi', 'STKaiti', '楷体', sans-serif;
   --font-body: '微软雅黑', 'KaiTi', 'STKaiti', '楷体', sans-serif;
   --font-code: 'Cascadia Code', 'Consolas', 'Monaco', 'Courier New', monospace;
@@ -932,7 +932,7 @@ main#main-content .article-card .meta {
 .article-content h6::before {
   content: attr(data-anchor);
   color: var(--accent-color);
-  margin-right: 10px;
+  margin-right: 0;
   font-weight: 600;
   font-size: inherit;
 }
