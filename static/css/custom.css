@@ -794,7 +794,7 @@ main#main-content .article-card .meta {
 .article-content h6 {
   cursor: pointer;
   position: relative;
-  padding-left: 25px;
+  padding-left: 0;
 }
 
 /* 锚点链接容器 - 常显示 */
